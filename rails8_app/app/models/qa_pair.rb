@@ -1,0 +1,2 @@
+class QaPair < ApplicationRecord
+end
