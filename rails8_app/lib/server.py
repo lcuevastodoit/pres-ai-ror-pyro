@@ -5,11 +5,18 @@ from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer, util
 import Pyro5.api
 
+def get_project_root():
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 @Pyro5.api.expose
 class AIChat:
     def __init__(self):
         load_dotenv()
-        self.conn = sqlite3.connect(os.getenv("SQLITE_DB_PATH", "../storage/development.sqlite3"))
+        db_path = os.getenv(
+            "SQLITE_DB_PATH",
+            os.path.join(get_project_root(), "storage", "development.sqlite3")
+        )
+        self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
         self.device = torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
         self.model = SentenceTransformer('all-MiniLM-L6-v2', device=self.device)
