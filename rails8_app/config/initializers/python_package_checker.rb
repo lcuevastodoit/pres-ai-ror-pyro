@@ -2,6 +2,7 @@ require "open3"
 
 class PythonPackageChecker
   REQUIRED_PACKAGES = [
+    "hf_xet",
     "dotenv",
     "sentence-transformers",
     "torch",

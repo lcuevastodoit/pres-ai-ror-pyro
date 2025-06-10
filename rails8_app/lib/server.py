@@ -20,6 +20,9 @@ class AIChat:
         self.cursor = self.conn.cursor()
         self.device = torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
         self.model = SentenceTransformer('all-MiniLM-L6-v2', device=self.device)
+        # self.model = SentenceTransformer('all-mpnet-base-v2', device=self.device)
+        # self.model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2', device=self.device)
+        # self.model = SentenceTransformer('nli-roberta-base-v2', device=self.device)
         self._load_data()
 
     def _load_data(self):
@@ -40,7 +43,14 @@ class AIChat:
     def get_prediction(self, query):
         if not self.questions:
             return "No hay preguntas disponibles."
-        query_emb = self.model.encode(query, convert_to_tensor=True, device=self.device)
+        query_emb = self.model.encode(
+            query,
+            convert_to_tensor=True,
+            device=self.device,
+            normalize_embeddings=True,  # ¡Nuevo parámetro clave!
+            batch_size=18,  # Ajustar según tu hardware
+            show_progress_bar=False
+        )
         threshold = 0.65
 
         def buscar_similaridad(embeddings, answers):
