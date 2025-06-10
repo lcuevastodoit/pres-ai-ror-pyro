@@ -1,0 +1,30 @@
+<div class="text-center">
+  <h1 class="text-4xl font-bold text-blue-500 mb-4">Rails + Python Demo</h1>
+
+  <form hx-post="/qa_pairs" hx-target="#qa-list" hx-swap="beforeend" class="mb-4">
+    <h2 class="text-2xl font-semibold mb-2">Add a New QA Pair</h2>
+    <table class="w-full mb-4">
+      <tr>
+        <td class="p-2"><strong>Question:</strong></td>
+        <td class="p-2"><strong>Answer:</strong></td>
+      </tr>
+      <tr>
+        <td class="p-2">
+          <input type="text" name="question" placeholder="Enter your question" class="w-full p-2 border rounded">
+        </td>
+        <td class="p-2">
+          <input type="text" name="answer" placeholder="Enter your answer" class="w-full p-2 border rounded">
+        </td>
+        <td class="p-2">
+          <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Add QA Pair</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  <ul id="qa-list" class="mt-4 text-lg text-gray-700">
+    <% @qa_pairs.each do |qa| %>
+      <%= render partial: "qa_pairs/new", locals: { qa: qa } %>
+    <% end %>
+  </ul>
+</div>

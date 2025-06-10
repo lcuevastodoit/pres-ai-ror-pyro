@@ -1,0 +1,7 @@
+<li class="p-2 border-b border-gray-300"></li>
+  <a href="/qa_pairs/<%= qa.id %>" hx-get="/qa_pairs/<%= qa.id %>" hx-swap="outerHTML">
+    <%= qa.question %>
+    <span class="text-gray-500">→</span>
+    <%= qa.answer %>
+  </a>
+</li>

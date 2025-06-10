@@ -1,0 +1,2 @@
+module QaPairHelper
+end
