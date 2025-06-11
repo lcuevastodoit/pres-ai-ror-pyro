@@ -18,15 +18,18 @@
 </div>
 
 <script>
-  // Limpiar textarea después de enviar con HTMX
+  let lastQuestion = '';
+
+  // Guardar el último mensaje enviado y limpiar textarea después de enviar con HTMX
   document.body.addEventListener('htmx:afterRequest', function(evt) {
     const form = document.querySelector('form[hx-post="/chat/ask"]');
     if (form) {
+      lastQuestion = form.question.value.trim() || lastQuestion;
       form.question.value = '';
     }
   });
 
-  // Permitir enviar con Enter (sin Shift) y limpiar textarea
+  // Permitir enviar con Enter (sin Shift) y recuperar último mensaje con ArrowUp
   document.addEventListener('DOMContentLoaded', function() {
     const textarea = document.getElementById('question');
     const form = textarea.closest('form');
@@ -34,6 +37,12 @@
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         form.requestSubmit(); // Envia el formulario (HTMX lo intercepta)
+      }
+      if (e.key === 'ArrowUp' && textarea.value === '') {
+        e.preventDefault();
+        textarea.value = lastQuestion;
+        // Opcional: coloca el cursor al final
+        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
       }
     });
   });
