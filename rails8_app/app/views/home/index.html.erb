@@ -17,3 +17,24 @@
   </form>
 </div>
 
+<script>
+  // Limpiar textarea después de enviar con HTMX
+  document.body.addEventListener('htmx:afterRequest', function(evt) {
+    const form = document.querySelector('form[hx-post="/chat/ask"]');
+    if (form) {
+      form.question.value = '';
+    }
+  });
+
+  // Permitir enviar con Enter (sin Shift) y limpiar textarea
+  document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.getElementById('question');
+    const form = textarea.closest('form');
+    textarea.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        form.requestSubmit(); // Envia el formulario (HTMX lo intercepta)
+      }
+    });
+  });
+</script>
