@@ -34,11 +34,12 @@ This is a demo Ruby on Rails 8 application showcasing a simple chat interface, d
 3. **Set up the database:**
    ```sh
    bin/rails db:setup
+   bin/rails db:seed
    ```
 
 4. **Run the server:**
    ```sh
-   bin/rails server
+   bin/dev
    ```
 
 5. Visit [http://localhost:3000](http://localhost:3000) in your browser.
