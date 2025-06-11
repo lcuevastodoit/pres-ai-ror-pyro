@@ -1,7 +1,8 @@
 class ChatController < ApplicationController
   def ask
-    @answer = ::ChatService.ask(params[:question])
-    render partial: "chat/answer", locals: { answer: @answer }
+    @question = params[:question]
+    @answer = ::ChatService.ask(@question)
+    render partial: "chat/answer", locals: { question: @question, answer: @answer }
   rescue StandardError => e
     Rails.logger.error("Error in ChatController#ask: #{e.message}")
     render json: { error: "An error occurred while processing your request." },
