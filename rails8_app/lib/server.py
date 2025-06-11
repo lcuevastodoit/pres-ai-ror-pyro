@@ -20,9 +20,6 @@ class AIChat:
         self.cursor = self.conn.cursor()
         self.device = torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
         self.model = SentenceTransformer('all-MiniLM-L6-v2', device=self.device)
-        # self.model = SentenceTransformer('all-mpnet-base-v2', device=self.device)
-        # self.model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2', device=self.device)
-        # self.model = SentenceTransformer('nli-roberta-base-v2', device=self.device)
         self._load_data()
 
     def _load_data(self):
@@ -35,8 +32,18 @@ class AIChat:
         self.questions_es = [q for q in self.questions if not q.isascii()]
         self.answers_es = [a for q, a in zip(self.questions, self.answers) if not q.isascii()]
         # Generar embeddings en memoria
-        self.embeddings_en = self.model.encode(self.questions_en, convert_to_tensor=True, device=self.device) if self.questions_en else None
-        self.embeddings_es = self.model.encode(self.questions_es, convert_to_tensor=True, device=self.device) if self.questions_es else None
+        self.embeddings_en = self.model.encode(
+            self.questions_en,
+            convert_to_tensor=True,
+            device=self.device,
+            normalize_embeddings=True
+        ) if self.questions_en else None
+        self.embeddings_es = self.model.encode(
+            self.questions_es,
+            convert_to_tensor=True,
+            device=self.device,
+            normalize_embeddings=True
+        ) if self.questions_es else None
         self.cursor.close()
         self.conn.close()
 
