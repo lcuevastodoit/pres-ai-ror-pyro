@@ -6,7 +6,21 @@ class PythonPackageChecker
     "dotenv",
     "sentence-transformers",
     "torch",
-    "Pyro5"
+    "Pyro5",
+    "langchain",
+    "langchain_community",
+    "langchain-huggingface",
+    "langchain-ollama",
+    "faiss-cpu",
+    "ollama",
+    "llama-cpp-python",
+    "pypdf",
+    '"numpy<2"',
+    "scikit-learn",
+    "redis",
+    "langdetect",
+    "sacremoses",
+    "psycopg2"
   ].freeze
 
   def self.ensure_packages_installed
