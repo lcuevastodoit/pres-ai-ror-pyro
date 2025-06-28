@@ -6,7 +6,22 @@ class PythonPackageChecker
     "dotenv",
     "sentence-transformers",
     "torch",
-    "Pyro5"
+    "Pyro5",
+    "langchain",
+    "langchain_community",
+    "langchain-huggingface",
+    "langchain-ollama",
+    "faiss-cpu",
+    "ollama",
+    "llama-cpp-python",
+    "pypdf",
+    '"numpy<2"',
+    '"huggingface_hub[cli]"',
+    "scikit-learn",
+    "redis",
+    "langdetect",
+    "sacremoses",
+    "psycopg2"
   ].freeze
 
   def self.ensure_packages_installed
@@ -15,6 +30,17 @@ class PythonPackageChecker
         install_package(package)
       end
     end
+    model_path = Rails.root.join("lib", "Llama-3.2-1B-Instruct-Q4_K_M.gguf")
+    download_model unless File.exist?(model_path)
+  end
+
+  def self.download_model
+    puts "Descargando el modelo Llama-3.2-1B-Instruct-Q4_K_M.gguf desde Hugging Face..."
+    lib_dir = Rails.root.join("lib")
+    system("huggingface-cli download bartowski/Llama-3.2-1B-Instruct-GGUF --include \"Llama-3.2-1B-Instruct-Q4_K_M.gguf\" --local-dir #{lib_dir}")
+    ollama_there = system("ollama list | grep llama3-1b-q4km")
+    modelfile_path = Rails.root.join("lib", "Modelfile")
+    system("ollama create llama3-1b-q4km -f #{modelfile_path}") unless ollama_there
   end
 
   def self.package_installed?(package)
