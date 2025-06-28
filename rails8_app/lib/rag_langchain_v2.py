@@ -34,16 +34,17 @@ class RAGChat:
         vector_db = FAISS.from_documents(chunks, embed_model)
 
         # Inicializar LLM y pipeline RAG
-        llm = OllamaLLM(model="llama3")
+        llm = OllamaLLM(model="llama3-1b-q4km")
         prompt = PromptTemplate(
-            template="""Usa el siguiente contexto para responder a la pregunta.
-Si no sabes la respuesta, di que no lo sabes.
+            template="""Responde únicamente utilizando la información proporcionada en el contexto.
+No añadas comentarios adicionales, explicaciones ni ejemplos. Si la respuesta no se encuentra en el contexto no la respondas, e indica claramente "Pregunta fuera de contexto".
 
 Contexto: {context}
 Pregunta: {question}
-Respuesta útil:""",
+Respuesta:""",
             input_variables=["context", "question"]
         )
+
         self.rag_chain = RetrievalQA.from_chain_type(
             llm=llm,
             chain_type="stuff",
