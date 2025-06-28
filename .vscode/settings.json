@@ -8,5 +8,11 @@
     "**/CVS": true,
     "**/.ruby-lsp": true
   },
-  "hide-files.files": []
+  "hide-files.files": [],
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+        "text": "write the commit message in English. Start the first line with a tag between square brackets e.g [fix|hotfix|feat|refactor|docs|test|task]. Max 50 characters in first line including the tag. Max 72 characters each of the lines in the following lines. First line should be a summary of the changes made. Next lines should be a detailed description of the changes made with a bullet list of files changed.",
+        "role": "assistant"
+    }
+  ],
 }
