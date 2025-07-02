@@ -58,7 +58,7 @@ if defined?(Rails::Server)
     puts "[Ollama] Ollama ya está corriendo."
   else
     puts "[Ollama] Ollama no está corriendo. Iniciando..."
-    @ollama_pid = spawn("ollama serve", out: "tmp/ollama.log", err: "tmp/ollama.log")
+    @ollama_pid = spawn("ollama serve", out: "log/ollama.log", err: "log/ollama.log")
     puts "[Ollama] Ollama iniciado con PID #{@ollama_pid}."
   end
 
