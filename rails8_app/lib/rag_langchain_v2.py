@@ -48,9 +48,9 @@ class RAGChat:
         vector_db = FAISS.from_documents(chunks, embed_model)
         self.log_message("Base de vectores FAISS creada")
         # Inicializar LLM y pipeline RAG
-        llm = OllamaLLM(model="llama3-1b-q4km")
+        llm = OllamaLLM(model="llama3-1b-q4km", num_ctx=4096, temperature=0, top_p=0.1)
         prompt = PromptTemplate(
-            template="""Responde únicamente utilizando la información proporcionada en el contexto.
+            template="""Responde únicamente utilizando solo la información proporcionada en el contexto.
 Si la respuesta no se encuentra en el contexto no la respondas, e indica claramente "Pregunta fuera de contexto".
 
 Contexto: {context}
