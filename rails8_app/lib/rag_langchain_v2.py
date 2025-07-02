@@ -1,6 +1,8 @@
 import os
 import datetime
 import glob
+import signal
+import sys
 import sqlite3
 import Pyro5.api
 from dotenv import load_dotenv
@@ -49,7 +51,7 @@ class RAGChat:
         llm = OllamaLLM(model="llama3-1b-q4km")
         prompt = PromptTemplate(
             template="""Responde únicamente utilizando la información proporcionada en el contexto.
-No añadas comentarios adicionales, explicaciones ni ejemplos. Si la respuesta no se encuentra en el contexto no la respondas, e indica claramente "Pregunta fuera de contexto".
+Si la respuesta no se encuentra en el contexto no la respondas, e indica claramente "Pregunta fuera de contexto".
 
 Contexto: {context}
 Pregunta: {question}
@@ -112,6 +114,10 @@ Respuesta:""",
             log_file.write(f"{message}\n")
         print(message)
 
+    def shutdown(self):
+        """Cleanup on process exit."""
+        self.log_message("RAGChat server is shutting down...")
+
 def main():
     daemon = Pyro5.api.Daemon()
     try:
@@ -119,10 +125,21 @@ def main():
         ns = Pyro5.api.locate_ns()
         uri = daemon.register(chat)
         ns.register("RAGChat", uri)
-        daemon.requestLoop()
         chat.log_message("RAGChat server is running...")
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            signal.signal(sig, lambda s, f: handle_exit(chat, daemon, s))
+        daemon.requestLoop()
     except Exception as e:
         chat.log_message(f"Error iniciando RAGChat: {e}")
+
+def handle_exit(chat, daemon, signum):
+    chat.log_message(f"Received signal {signum}, shutting down…")
+    try:
+        daemon.shutdown()
+    except:
+        pass
+    chat.shutdown()
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()
