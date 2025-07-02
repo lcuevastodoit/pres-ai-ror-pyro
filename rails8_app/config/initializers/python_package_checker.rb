@@ -11,6 +11,7 @@ class PythonPackageChecker
     "langchain_community",
     "langchain-huggingface",
     "langchain-ollama",
+    "langchain-pymupdf4llm",
     "faiss-cpu",
     "ollama",
     "llama-cpp-python",
